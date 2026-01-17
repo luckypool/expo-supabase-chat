@@ -1,5 +1,5 @@
 {
-  "name": "messenger-app",
+  "name": "chatkit",
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {

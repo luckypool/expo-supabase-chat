@@ -1,6 +1,6 @@
-# Messenger App
+# ChatKit
 
-React Native + Expo + Supabase を使用した音声通話機能なしのメッセンジャーアプリです。
+React Native + Expo + Supabase を使用したメッセンジャーアプリのスケルトンプロジェクトです。
 
 ## 技術スタック
 
