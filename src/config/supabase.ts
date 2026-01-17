@@ -2,15 +2,15 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabasePublishableKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '';
 
 // Supabaseの設定が有効かどうかを確認
 export const isSupabaseConfigured =
-  supabaseUrl.startsWith('http') && supabaseAnonKey.length > 0;
+  supabaseUrl.startsWith('http') && supabasePublishableKey.length > 0;
 
 // Supabaseクライアント（設定が有効な場合のみ初期化）
 export const supabase: SupabaseClient | null = isSupabaseConfigured
-  ? createClient(supabaseUrl, supabaseAnonKey, {
+  ? createClient(supabaseUrl, supabasePublishableKey, {
       auth: {
         storage: AsyncStorage,
         autoRefreshToken: true,
