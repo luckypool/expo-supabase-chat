@@ -12,7 +12,7 @@ React Native + Expo + Supabase を使用したメッセンジャーアプリの�
 ## 機能一覧
 
 ### 基本機能
-- [x] Email/Password 認証
+- [x] Magic Link 認証（パスワードレス）
 - [ ] 1対1チャット
 - [ ] リアルタイムメッセージング
 
@@ -60,6 +60,10 @@ cd ios && pod install && cd ..
 EXPO_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 EXPO_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
+
+5. **Magic Link認証の設定**: Authentication > URL Configuration で Redirect URLs に以下を追加:
+   - `exp://` (Expo Go 開発用)
+   - `expo-supabase-chat://` (プロダクションビルド用)
 
 ### データベーススキーマの作成
 
