@@ -14,11 +14,10 @@ import { useAuth } from '../hooks/useAuth';
 import { isSupabaseConfigured } from '../config/supabase';
 
 export function AuthScreen() {
-  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signIn, signUp } = useAuth();
+  const [emailSent, setEmailSent] = useState(false);
+  const { signInWithMagicLink } = useAuth();
 
   const handleSubmit = async () => {
     if (!isSupabaseConfigured) {
@@ -29,29 +28,62 @@ export function AuthScreen() {
       return;
     }
 
-    if (!email.trim() || !password.trim()) {
-      Alert.alert('エラー', 'メールアドレスとパスワードを入力してください');
+    if (!email.trim()) {
+      Alert.alert('エラー', 'メールアドレスを入力してください');
       return;
     }
 
     setLoading(true);
     try {
-      const { error } = isLogin
-        ? await signIn(email, password)
-        : await signUp(email, password);
+      const { error } = await signInWithMagicLink(email);
 
       if (error) {
         Alert.alert('エラー', error.message);
-      } else if (!isLogin) {
-        Alert.alert(
-          '確認メールを送信しました',
-          'メールを確認してアカウントを有効化してください'
-        );
+      } else {
+        setEmailSent(true);
       }
     } finally {
       setLoading(false);
     }
   };
+
+  const handleResend = async () => {
+    setEmailSent(false);
+    await handleSubmit();
+  };
+
+  if (emailSent) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.content}>
+          <Text style={styles.title}>メールを確認してください</Text>
+          <View style={styles.successBanner}>
+            <Text style={styles.successIcon}>✉️</Text>
+            <Text style={styles.successText}>
+              {email} にログインリンクを送信しました
+            </Text>
+            <Text style={styles.successSubtext}>
+              メールに記載されているリンクをタップしてログインしてください
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={handleResend}
+          >
+            <Text style={styles.secondaryButtonText}>メールを再送信</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.switchButton}
+            onPress={() => setEmailSent(false)}
+          >
+            <Text style={styles.switchText}>別のメールアドレスを使用</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView
@@ -61,7 +93,7 @@ export function AuthScreen() {
       <View style={styles.content}>
         <Text style={styles.title}>メッセンジャー</Text>
         <Text style={styles.subtitle}>
-          {isLogin ? 'ログイン' : 'アカウント作成'}
+          メールアドレスでログイン
         </Text>
 
         {!isSupabaseConfigured && (
@@ -87,15 +119,6 @@ export function AuthScreen() {
             autoCorrect={false}
           />
 
-          <TextInput
-            style={styles.input}
-            placeholder="パスワード"
-            placeholderTextColor="#999"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-
           <TouchableOpacity
             style={[styles.button, loading && styles.buttonDisabled]}
             onPress={handleSubmit}
@@ -105,22 +128,17 @@ export function AuthScreen() {
               <ActivityIndicator color="#FFFFFF" />
             ) : (
               <Text style={styles.buttonText}>
-                {isLogin ? 'ログイン' : '登録'}
+                ログインリンクを送信
               </Text>
             )}
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity
-          style={styles.switchButton}
-          onPress={() => setIsLogin(!isLogin)}
-        >
-          <Text style={styles.switchText}>
-            {isLogin
-              ? 'アカウントをお持ちでないですか？ 登録'
-              : 'すでにアカウントをお持ちですか？ ログイン'}
+        <View style={styles.infoBox}>
+          <Text style={styles.infoText}>
+            パスワードは不要です。メールアドレスを入力するとログインリンクが送信されます。
           </Text>
-        </TouchableOpacity>
+        </View>
       </View>
     </KeyboardAvoidingView>
   );
@@ -202,5 +220,55 @@ const styles = StyleSheet.create({
   switchText: {
     color: '#007AFF',
     fontSize: 14,
+  },
+  successBanner: {
+    backgroundColor: '#D4EDDA',
+    borderRadius: 12,
+    padding: 24,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: '#C3E6CB',
+    alignItems: 'center',
+  },
+  successIcon: {
+    fontSize: 48,
+    marginBottom: 16,
+  },
+  successText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#155724',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  successSubtext: {
+    fontSize: 14,
+    color: '#155724',
+    textAlign: 'center',
+  },
+  secondaryButton: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#007AFF',
+  },
+  secondaryButtonText: {
+    color: '#007AFF',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  infoBox: {
+    marginTop: 16,
+    padding: 16,
+    backgroundColor: '#F0F8FF',
+    borderRadius: 12,
+  },
+  infoText: {
+    fontSize: 14,
+    color: '#666666',
+    textAlign: 'center',
+    lineHeight: 20,
   },
 });
