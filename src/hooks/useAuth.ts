@@ -38,24 +38,12 @@ export function useAuth() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = useCallback(async (email: string, password: string): Promise<AuthResult> => {
+  const signInWithMagicLink = useCallback(async (email: string): Promise<AuthResult> => {
     if (!supabase) {
       return { data: null, error: { message: 'Supabaseが設定されていません' } };
     }
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signInWithOtp({
       email,
-      password,
-    });
-    return { data, error };
-  }, []);
-
-  const signIn = useCallback(async (email: string, password: string): Promise<AuthResult> => {
-    if (!supabase) {
-      return { data: null, error: { message: 'Supabaseが設定されていません' } };
-    }
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
     });
     return { data, error };
   }, []);
@@ -73,8 +61,7 @@ export function useAuth() {
     user,
     loading,
     isConfigured: isSupabaseConfigured,
-    signUp,
-    signIn,
+    signInWithMagicLink,
     signOut,
   };
 }
