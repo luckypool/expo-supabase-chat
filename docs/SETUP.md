@@ -41,11 +41,10 @@ bun install
 
 ### 3.2 APIキーの取得
 
-1. Supabase ダッシュボードで「Project Settings」を開く
-2. 「API」セクションに移動
-3. 以下の値をコピー:
-   - `Project URL`
-   - `anon/public key`
+1. Supabase ダッシュボードで「Settings」を開く
+2. 以下の値をコピー:
+   - **Project URL**: Settings > Data API > Project URL
+   - **Publishable key**: Settings > API Keys > Publishable key
 
 ### 3.3 環境変数の設定
 
