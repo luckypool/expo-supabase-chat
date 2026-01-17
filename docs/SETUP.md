@@ -26,12 +26,10 @@ cd expo-supabase-chat
 ### 依存関係のインストール
 
 ```bash
-# パッケージのインストール
 bun install
-
-# iOSの依存関係をインストール（初回のみ）
-cd ios && pod install && cd ..
 ```
+
+> **Note**: Expo Go を使う場合は `bun install` のみでOKです。Development Build を使う場合は `cd ios && pod install && cd ..` も実行してください。
 
 ## 3. Supabaseのセットアップ
 
