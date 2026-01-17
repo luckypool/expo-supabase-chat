@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ChatKit",
-    "slug": "chatkit",
+    "name": "expo-supabase-chat",
+    "slug": "expo-supabase-chat",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

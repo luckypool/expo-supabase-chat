@@ -1,4 +1,4 @@
-# ChatKit
+# expo-supabase-chat
 
 React Native + Expo + Supabase を使用したメッセンジャーアプリのスケルトンプロジェクトです。
 
